@@ -29,5 +29,7 @@ public class Application {
                 .column("organization_name AS orgName")
                 .column("address AS fullAddress")
                 .from().dataSet(identifier).build();
+
+        
     }
 }
