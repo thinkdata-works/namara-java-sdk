@@ -2,6 +2,7 @@ package namara.client;
 
 import namara.client.exception.AuthorizationException;
 import namara.client.exception.ConnectionException;
+import namara.query.Query;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
