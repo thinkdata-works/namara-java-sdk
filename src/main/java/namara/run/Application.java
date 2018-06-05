@@ -3,10 +3,9 @@ package namara.run;
 import namara.client.Client;
 import namara.client.exception.AuthorizationException;
 import namara.client.exception.ConnectionException;
-import namara.query.Exists;
 import namara.query.Identifier;
-import namara.query.Query;
 import namara.query.QueryBuilder;
+import namara.client.ResultSet;
 
 /*
  * Class for testing library as:
@@ -25,11 +24,15 @@ public class Application {
         client.testConnection();
 
         Identifier identifier = new Identifier(DATA_SET_ID, VERSION);
-        Query query = new QueryBuilder().select()
+        QueryBuilder queryBuilder = new QueryBuilder(10, 0).select()
                 .column("organization_name AS orgName")
                 .column("address AS fullAddress")
                 .from().dataSet(identifier).build();
 
-        
+        ResultSet resultSet = new ResultSet(queryBuilder, client);
+
+        while(resultSet.hasNext()) {
+            System.out.println(resultSet.next());
+        }
     }
 }

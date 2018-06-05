@@ -3,11 +3,13 @@ package namara.query;
 public class QueryBuilder {
     private final Context context;
 
-    // Declared by the querying user
-    // Will be used to build sql statement and create pagination for resultSet
-    // since query results will limit to 250 rows
-    private double limit;
-    private double offset;
+    /*
+     * Declared by the querying user
+     * Will be used to build sql statement and create pagination for resultSet
+     * since query results will limit to 250 rows
+     */
+    private Integer limit;
+    private Integer offset;
 
     /**
      * Make a new query. Will set up the root context
@@ -21,9 +23,9 @@ public class QueryBuilder {
      *
      * @param limit
      */
-    public QueryBuilder(double limit) {
+    public QueryBuilder(int limit) {
         this();
-        this.limit = limit;
+        this.limit = Math.abs(limit);
     }
 
     /**
@@ -32,9 +34,9 @@ public class QueryBuilder {
      * @param limit
      * @param offset
      */
-    public QueryBuilder(double limit, double offset) {
+    public QueryBuilder(int limit, int offset) {
         this(limit);
-        this.offset = offset;
+        this.offset = Math.abs(offset);
     }
 
     /**
@@ -48,10 +50,28 @@ public class QueryBuilder {
         return context.toString();
     }
 
+    public String buildQuery(int limit, int offset) {
+        return toString() + " LIMIT " + limit + " OFFSET " + offset;
+    }
+
     /**
      * Returns the query context for this builder
      *
      * @return The Context for this query builder
      */
     public Context getContext() { return this.context; }
+
+    /**
+     * Gets the set limit for the query builder
+     *
+     * @return the limit
+     */
+    public Integer getLimit() { return this.limit; }
+
+    /**
+     * Gets the set offset for the query builder
+     *
+     * @return the offset
+     */
+    public Integer getOffset() { return this.offset; }
 }
