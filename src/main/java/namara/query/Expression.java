@@ -8,10 +8,10 @@ abstract class Expression {
     }
 
     /**
-     * Builds the final Query from an expression, or chain of expressions
-     * @return the resulting Query
+     * Gets the queryBuilder for the constructed expression
+     * @return the resulting QueryBuilder
      */
-    public Query build() {
-        return new Query(context.getQueryBuilder());
+    public QueryBuilder build() {
+        return context.getQueryBuilder();
     }
 }

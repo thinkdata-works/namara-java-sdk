@@ -1,4 +1,4 @@
-package namara.results.exception;
+package namara.client.exception;
 
 public class ColumnNotFoundException extends Exception {
     /**
