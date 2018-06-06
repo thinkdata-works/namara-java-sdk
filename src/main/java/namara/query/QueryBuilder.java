@@ -5,7 +5,7 @@ public class QueryBuilder {
 
     /*
      * Declared by the querying user
-     * Will be used to build sql statement and create pagination for resultSet
+     * Will be used to getBuilder sql statement and create pagination for resultSet
      * since query results will limit to 250 rows
      */
     private Integer limit;

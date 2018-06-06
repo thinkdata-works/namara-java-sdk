@@ -20,8 +20,8 @@ abstract class TerminalExpression extends Expression {
     }
 
     @Override
-    public QueryBuilder build() {
+    public QueryBuilder getBuilder() {
         terminate();
-        return super.build();
+        return super.getBuilder();
     }
 }

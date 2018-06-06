@@ -11,7 +11,7 @@ abstract class Expression {
      * Gets the queryBuilder for the constructed expression
      * @return the resulting QueryBuilder
      */
-    public QueryBuilder build() {
+    public QueryBuilder getBuilder() {
         return context.getQueryBuilder();
     }
 }
