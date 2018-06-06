@@ -12,16 +12,23 @@ public class ConnectionException extends NamaraException {
     public String requestBody;
 
     /**
-     * Exception thrown when unable to connect to
+     * Exception thrown when unable to connect to Namara at host
      *
      * @param message
-     * @param connectionUrl
+     * @param connectionUrl The url that was attempted
      */
     public ConnectionException(String message, String connectionUrl) {
         super(message);
         this.connectionUrl = connectionUrl;
     }
 
+    /**
+     * Exception thrown when untable to connect to Namara at host
+     *
+     * @param message
+     * @param connectionUrl The url that was attempted
+     * @param requestBody The request body sent to the url
+     */
     public ConnectionException(String message, String connectionUrl, String requestBody) {
         this(message, connectionUrl);
         this.requestBody = requestBody;

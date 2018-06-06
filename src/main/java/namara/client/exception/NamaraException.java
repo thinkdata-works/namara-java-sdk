@@ -2,7 +2,8 @@ package namara.client.exception;
 
 public class NamaraException extends Exception {
     /**
-     * Base exception type
+     * Base exception type for all exceptions generating during
+     * connecting and querying
      *
      * @param message
      */

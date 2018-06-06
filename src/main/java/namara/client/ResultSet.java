@@ -8,21 +8,58 @@ import namara.query.QueryBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.Connection;
 import java.util.*;
 
 public class ResultSet implements Iterator<Record> {
+    /**
+     * The constructed query. This will be used for result pagination
+     */
     private QueryBuilder queryBuilder;
+
+    /**
+     * The namara client to send the query to
+     */
     private Client client;
+
+    /**
+     * Current instance of the result iterator
+     */
     private Iterator<Object> recordIterator;
 
+    /**
+     * Holds any exception that has been raised during querying.
+     * Since the interface does not raise any errors, they need to be
+     * retained and checked by the user
+     */
     private NamaraException exception;
 
+    /**
+     * Number of records to fetch for each iteration. This is the maximum for Namara
+     */
     private static final int FETCH_SIZE = 250;
+
+    /**
+     * Offset to start searching for records at
+     */
     private static final int DEFAULT_OFFSET = 0;
 
+    /**
+     * Reference to the current limit for requesting results
+     */
     private int currentLimit;
+
+    /**
+     * Reference to the current offset for requesting results
+     */
     private int currentOffset;
 
+    /**
+     * Initializes a new ResultSet by sending a query to the Namara client
+     *
+     * @param queryBuilder the query constructor
+     * @param client the namara client
+     */
     public ResultSet(QueryBuilder queryBuilder, Client client) {
         this.queryBuilder = queryBuilder;
         this.client = client;
@@ -54,13 +91,22 @@ public class ResultSet implements Iterator<Record> {
     }
 
     /**
-     * Throws
-     * @throws Throwable
+     * Throws the exception generated during iterating
+     *
+     * @throws AuthorizationException
+     * @throws ConnectionException
+     * @throws QueryException
+     * @throws NamaraException - base class. One of the above will likely be thrown, but this can catch all of them
      */
-    public void throwException() throws NamaraException {
+    public void throwException() throws AuthorizationException, ConnectionException, QueryException, NamaraException {
         throw exception;
     }
 
+    /**
+     * Gets the next record
+     *
+     * @return
+     */
     public Record next() {
         return new Record((JSONObject) recordIterator.next());
     }
@@ -82,11 +128,22 @@ public class ResultSet implements Iterator<Record> {
             }
             return recordIterator.hasNext();
         } catch (NamaraException e) {
+            // Catch any exception and record them here
             this.exception = e;
+            // This may be a false positive and should be checked by whoever is using the iterator on each pass
             return false;
         }
     }
 
+    /**
+     * Executes the query with the set limit and offset and creates an iterator out of the response records
+     * Adjusts limit and offest for any subsequent queries.
+     *
+     * @return
+     * @throws AuthorizationException
+     * @throws QueryException
+     * @throws ConnectionException
+     */
     private Iterator<Object> retrieveNewIterator() throws AuthorizationException, QueryException, ConnectionException {
         JSONObject responseObject = client.query(queryBuilder.buildQuery(currentLimit, currentOffset));
         JSONArray responseRecords = responseObject.getJSONArray("results");
@@ -94,11 +151,12 @@ public class ResultSet implements Iterator<Record> {
         // Update limit and offset for next query
         currentOffset += currentLimit;
 
+        // Check if we need to fetch less than the full window size
         if(queryBuilder.getLimit() != null && (queryBuilder.getLimit() - currentOffset) <= FETCH_SIZE) {
             // If the remaining rows fit in the fetching window
             currentLimit = queryBuilder.getLimit() - currentOffset;
         } else {
-            // Otherwise decrease the window size
+            // Otherwise, use default window size
             currentLimit = FETCH_SIZE;
         }
 
