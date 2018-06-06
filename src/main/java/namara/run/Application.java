@@ -27,7 +27,7 @@ public class Application {
         QueryBuilder queryBuilder = new QueryBuilder(10, 3).select()
                 .column("organization_name AS orgName")
                 .column("address AS fullAddress")
-                .from().dataSet(identifier).build();
+                .from().dataSet(identifier).getBuilder();
 
         ResultSet resultSet = new ResultSet(queryBuilder, client);
 

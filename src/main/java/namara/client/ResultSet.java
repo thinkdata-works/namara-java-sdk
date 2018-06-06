@@ -8,7 +8,6 @@ import namara.query.QueryBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.Connection;
 import java.util.*;
 
 public class ResultSet implements Iterator<Record> {
@@ -123,7 +122,7 @@ public class ResultSet implements Iterator<Record> {
         try {
             // Check if list of records exists OR if the current iterator has run out of records
             if(recordIterator == null || !recordIterator.hasNext()) {
-                // Attempt to build a new list of them
+                // Attempt to getBuilder a new list of them
                 recordIterator = retrieveNewIterator();
             }
             return recordIterator.hasNext();

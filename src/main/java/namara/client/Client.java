@@ -13,7 +13,7 @@ import java.net.URL;
 
 public class Client {
 
-    private class Endpoints {
+    class Endpoints {
         /**
          * Endpoint for check if a user exists
          */
