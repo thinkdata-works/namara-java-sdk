@@ -24,7 +24,7 @@ public class Application {
         client.testConnection();
 
         Identifier identifier = new Identifier(DATA_SET_ID, VERSION);
-        QueryBuilder queryBuilder = new QueryBuilder(10, 0).select()
+        QueryBuilder queryBuilder = new QueryBuilder(10, 3).select()
                 .column("organization_name AS orgName")
                 .column("address AS fullAddress")
                 .from().dataSet(identifier).build();
