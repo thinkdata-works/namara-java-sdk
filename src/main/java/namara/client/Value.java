@@ -29,7 +29,12 @@ public class Value {
      * @return - the raw value
      */
     public Object get() {
-        return valueHolder.get(key);
+        try {
+            return valueHolder.get(key);
+        } catch(JSONException e) {
+            // This should never happen, we only instantiate the Value because it exists at a key
+            return (Object) throwIt("Object");
+        }
     }
 
     /**
@@ -39,8 +44,6 @@ public class Value {
          return valueHolder.isNull(key);
      }
 
-     // TODO - all of the OPT calls
-    
     /**
      * @return - the value as BigDecimal
      * @throws ValueConversionException
@@ -50,6 +53,21 @@ public class Value {
             return valueHolder.getBigDecimal(key);
         } catch(JSONException e) {
             return (BigDecimal) throwIt("BigDecimal");
+        }
+    }
+
+    /**
+     * Attempts to get value as BigDecimal
+     * Returns defaultValue if null or can not be converted
+     *
+     * @param defaultValue
+     * @return - value as BigDecimal or defaultValue
+     */
+    public BigDecimal tryBigDecimal(BigDecimal defaultValue) {
+        try {
+            return valueHolder.optBigDecimal(key, defaultValue);
+        } catch(JSONException e) {
+            return defaultValue;
         }
     }
 
@@ -66,6 +84,21 @@ public class Value {
     }
 
     /**
+     * Attempts to get value as BigInteger
+     * Returns defaultValue if null or can not be converted
+     *
+     * @param defaultValue
+     * @return - value as BigInteger or defaultValue
+     */
+    public BigInteger tryBigInteger(BigInteger defaultValue) {
+        try {
+            return valueHolder.optBigInteger(key, defaultValue);
+        } catch(JSONException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
      * @return - the value as Boolean
      * @throws ValueConversionException
      */
@@ -74,6 +107,21 @@ public class Value {
             return valueHolder.getBoolean(key);
         } catch(JSONException e) {
             return (Boolean) throwIt("boolean");
+        }
+    }
+
+    /**
+     * Attempts to get value as Boolean
+     * Returns defaultValue if null or can not be converted
+     *
+     * @param defaultValue
+     * @return - the value as Boolean or defaultValue
+     */
+    public Boolean tryBoolean(Boolean defaultValue) {
+        try {
+            return valueHolder.optBoolean(key, defaultValue);
+        } catch(JSONException e) {
+            return defaultValue;
         }
     }
 
