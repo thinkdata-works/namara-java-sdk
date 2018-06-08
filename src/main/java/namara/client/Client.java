@@ -17,15 +17,15 @@ public class Client {
         /**
          * Endpoint for check if a user exists
          */
-        public static final String TESTING_ENDPOINT = "/v0/static/authenticated";
+        public static final String TESTING_ENDPOINT = "v0/static/authenticated";
 
         /**
          * Endpoint for querying
          */
-        public static final String QUERY_ENDPOINT = "/v0/query";
+        public static final String QUERY_ENDPOINT = "v0/query";
     }
 
-    private class NamaraResponse {
+    class NamaraResponse {
         /**
          * HTTP response code
          */
@@ -49,11 +49,7 @@ public class Client {
         }
     }
 
-    private class Connection {
-        /**
-         * Connection protocol
-         */
-        private static final String PROTOCOL = "https";
+    class Connection {
 
         /**
          * The namara instance that will be connected to.
@@ -65,12 +61,12 @@ public class Client {
          */
         private String apiKey;
 
-        private Connection(String namaraHost, String apiKey) {
+        public Connection(String namaraHost, String apiKey) {
             this.namaraHost = processHostString(namaraHost);
             this.apiKey = apiKey;
         }
 
-        private String getNamaraHost() {
+        public String getNamaraHost() {
             return namaraHost;
         }
 
@@ -93,18 +89,18 @@ public class Client {
         /**
          * Perform a GET.json request to namara,
          *
-         * @param urlString
+         * @param url
          * @return The response body + response code
          * @throws IOException
          */
-        private NamaraResponse getJSON(String urlString) throws IOException {
+        private NamaraResponse getJSON(HttpUrl url) throws IOException {
             OkHttpClient httpClient = new OkHttpClient();
 
             Request request = new Request.Builder()
                     .addHeader("X-Api-Key", apiKey)
                     .addHeader("Accept", "application/json")
                     .addHeader("Content-Type", "application/json")
-                    .url(urlString)
+                    .url(url)
                     .build();
 
             Response response = httpClient.newCall(request).execute();
@@ -114,12 +110,12 @@ public class Client {
         /**
          * Perform a POST.json request to namara
          *
-         * @param urlString
+         * @param url
          * @param requestBody
          * @return The response body + response code
          * @throws IOException
          */
-        private NamaraResponse postJSON(String urlString, String requestBody) throws IOException {
+        private NamaraResponse postJSON(HttpUrl url, String requestBody) throws IOException {
             OkHttpClient httpClient = new OkHttpClient();
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), requestBody);
 
@@ -127,28 +123,12 @@ public class Client {
                     .addHeader("X-API-Key", apiKey)
                     .addHeader("Accept", "application/json")
                     .addHeader("Content-Type", "application/json")
-                    .url(urlString)
+                    .url(url)
                     .post(body)
                     .build();
 
             Response response = httpClient.newCall(request).execute();
             return new NamaraResponse(response.code(), response.body().string());
-        }
-
-        /**
-         * Constructs URL for sending to Namara
-         *
-         * @param endpoint see enum Endpoints
-         * @return
-         * @throws ConnectionException
-         */
-        private String constructUrl(String endpoint) throws ConnectionException {
-            String urlString = PROTOCOL + "://" + namaraHost + endpoint;
-            try {
-                return new URL(urlString).toString();
-            } catch(MalformedURLException e) {
-                throw new ConnectionException("Unable to parse url \"" + urlString +"\": " + e.getMessage(), urlString);
-            }
         }
     }
 
@@ -156,6 +136,11 @@ public class Client {
      * Connection to namara that can be used to interface
      */
     private Connection connection;
+
+    /**
+     * Making package private so this can be set in unit tests
+     */
+    private final String PROTOCOL = "https";
 
     /**
      * Builds a new client for interfacing with Namara
@@ -178,10 +163,23 @@ public class Client {
      */
     public boolean testConnection() throws AuthorizationException, ConnectionException {
         // Will throw ConnectionException if it can't be parsed
-        String connectionString = connection.constructUrl(Endpoints.TESTING_ENDPOINT);
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(PROTOCOL)
+                .host(connection.getNamaraHost())
+                .addPathSegments(Endpoints.TESTING_ENDPOINT)
+                .build();
 
+        System.out.println(url.toString());
+
+        return testConnection(url);
+    }
+
+    /*
+     * Isolated for testing/mocking
+     */
+    boolean testConnection(HttpUrl connectionUrl) throws AuthorizationException, ConnectionException {
         try {
-            NamaraResponse response = connection.getJSON(connectionString);
+            NamaraResponse response = connection.getJSON(connectionUrl);
             int statusCode = response.responseCode;
 
             switch(Integer.valueOf(statusCode / 100)) {
@@ -192,12 +190,12 @@ public class Client {
                             "[" + statusCode * 100 + "] " + response.responseBody);
                 default:
                     throw new ConnectionException("Something went wrong connecting to Namara. " +
-                            "[" + statusCode * 100 + "] " + response.responseBody, connectionString);
+                            "[" + statusCode * 100 + "] " + response.responseBody, connectionUrl.toString());
             }
 
         } catch(IOException e) {
             // Something went wrong with connecting, no response found
-            throw new ConnectionException("Encountered error when connecting: " + e.getMessage(), connectionString);
+            throw new ConnectionException("Encountered error when connecting: " + e.getMessage(), connectionUrl.toString());
         }
     }
 
@@ -211,11 +209,22 @@ public class Client {
      * @throws QueryException
      */
     public JSONObject query(String queryString) throws AuthorizationException, ConnectionException, QueryException {
-        String connectionString = connection.constructUrl(Endpoints.QUERY_ENDPOINT);
         String jsonString = new JSONObject().put("query", queryString).toString();
 
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(PROTOCOL)
+                .host(connection.getNamaraHost())
+                .addPathSegment(Endpoints.QUERY_ENDPOINT)
+                .build();
+        return query(url, jsonString);
+    }
+
+    /*
+     * Isolated for testing/mocking
+     */
+    JSONObject query(HttpUrl connectionUrl, String jsonString) throws AuthorizationException, ConnectionException, QueryException {
         try {
-            NamaraResponse response = connection.postJSON(connectionString, jsonString);
+            NamaraResponse response = connection.postJSON(connectionUrl, jsonString);
             switch(Integer.valueOf(response.responseCode)) {
                 case 200:
                     return new JSONObject(response.responseBody);
@@ -226,10 +235,10 @@ public class Client {
                     throw new QueryException("Error executing query. Got response: " + response.responseBody);
                 default:
                     throw new ConnectionException("Something went wrong conneting to Namara. [" +
-                            response.responseCode + "] " + response.responseBody, connectionString, jsonString);
+                            response.responseCode + "] " + response.responseBody, connectionUrl.toString(), jsonString);
             }
         } catch(IOException e) {
-            throw new ConnectionException("Encountered error when connecting: " + e.getMessage(), connectionString);
+            throw new ConnectionException("Encountered error when connecting: " + e.getMessage(), connectionUrl.toString());
         }
     }
 
