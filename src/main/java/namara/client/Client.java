@@ -169,8 +169,6 @@ public class Client {
                 .addPathSegments(Endpoints.TESTING_ENDPOINT)
                 .build();
 
-        System.out.println(url.toString());
-
         return testConnection(url);
     }
 
