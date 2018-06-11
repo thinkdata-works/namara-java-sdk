@@ -1,4 +1,4 @@
-FROM maven:3.5.3-jdk-8
+FROM maven:3.5.3-jdk-8 as build
 MAINTAINER Chris Sandison <chris@thinkdataworks.com>
 
 ENV APPDIR /src
@@ -13,3 +13,14 @@ COPY . $APPDIR
 
 RUN mvn package -e && \
     ls -l target/ > target/target.txt
+
+FROM openjdk:8-jre-alpine
+
+ENV APPDIR /app
+ENV VERSION 1.0
+
+WORKDIR $APPDIR
+RUN mkdir -p $APPDIR
+
+COPY --from=build "/src/target/namara-$VERSION-SNAPSHOP.jar" namara-$VERSION.jar
+COPY --from=build "/src/target/target.txt" target.txt
