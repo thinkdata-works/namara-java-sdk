@@ -8,7 +8,7 @@ abstract class Condition extends Expression {
     /**
      * Adds the condition string to the Expression
      *
-     * @param condition
+     * @param condition conditional statement
      */
     public void add(String condition) {
         context.append(getPrefix() + " " + condition);
@@ -16,8 +16,8 @@ abstract class Condition extends Expression {
 
     /**
      * Creates a BETWEEN condition for the expression.
-     * If start is null, but end is not null, expression will become columnName <= end
-     * If start is not null, but end is null, expression will become columname >= start
+     * If start is null, but end is not null, expression will become columnName less than or equal to end
+     * If start is not null, but end is null, expression will become columname greater than or equal to start
      *
      * @param columnName the column for examination
      * @param start starting timestamp (can be null)
@@ -39,8 +39,8 @@ abstract class Condition extends Expression {
 
     /**
      * Creates a NOT BETWEEN condition for expression.
-     * If start is null, but end is not null, expression will become columnName > end
-     * If start is not null, but end is null, expression will become columnName < start
+     * If start is null, but end is not null, expression will become columnName less than end
+     * If start is not null, but end is null, expression will become columnName greater than start
      *
      * @param columnName the column for examination
      * @param start starting timestamp (can be null)

@@ -158,6 +158,7 @@ public class Client {
      *
      * @throws AuthorizationException when API Key is not found or not valid for a user at that host
      * @throws ConnectionException when namara host can not be reached
+     * @return true if the client is authorized
      */
     public boolean testConnection() throws AuthorizationException, ConnectionException {
         // Will throw ConnectionException if it can't be parsed
@@ -198,11 +199,11 @@ public class Client {
     /**
      * Performs a query request on Namara and returns all results from the query
      *
-     * @param queryString
+     * @param queryString - query to issue to namara
      * @return The resulting collection of records
-     * @throws AuthorizationException
-     * @throws ConnectionException
-     * @throws QueryException
+     * @throws AuthorizationException - when unable to authorize client for namara
+     * @throws ConnectionException - when unable to connect to namara
+     * @throws QueryException - when unable to build or execute query on namara
      */
     public JSONObject query(String queryString) throws AuthorizationException, ConnectionException, QueryException {
         String jsonString = new JSONObject().put("query", queryString).toString();

@@ -10,6 +10,7 @@ import namara.client.exception.QueryException;
 import namara.query.Identifier;
 import namara.query.QueryBuilder;
 import namara.client.ResultSet;
+import namara.query.Select;
 
 import java.util.Iterator;
 

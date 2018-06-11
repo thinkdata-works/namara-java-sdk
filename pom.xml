@@ -5,6 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <dependencies>
+
+        <!-- Development Dependencies -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
@@ -36,6 +38,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Testing dependencies -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>mockwebserver</artifactId>
@@ -50,6 +53,21 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!-- Javadocs -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <failOnWarnings>false</failOnWarnings>
+                    <show>public</show>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <groupId>com.thinkdata</groupId>
     <artifactId>namara</artifactId>

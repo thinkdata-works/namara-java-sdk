@@ -1,10 +1,6 @@
 package namara.query;
 
 public class Any extends Expression {
-    /**
-     * Creates an "ANY" query node
-     * @param context
-     */
     Any(Context context) {
         super(context);
         this.context.append("ANY");
@@ -13,7 +9,7 @@ public class Any extends Expression {
     /**
      * Creates an "ANY" query node
      *
-     * @param expression
+     * @param expression - the evaluating expression
      * @return the resulting expression
      */
     public Any any(Expression expression) {

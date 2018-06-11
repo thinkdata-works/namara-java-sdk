@@ -9,12 +9,7 @@ public class Select {
     private Context context;
     private List<String> columns;
 
-    /**
-     * Initializes a new expression with a SELECT node
-     *
-     * @param context
-     */
-    public Select(Context context) {
+    Select(Context context) {
         this.context = context;
         this.context.append("SELECT");
         this.columns = new LinkedList();

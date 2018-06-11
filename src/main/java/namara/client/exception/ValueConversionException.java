@@ -6,7 +6,7 @@ public class ValueConversionException extends RuntimeException {
 
     /**
      * Error when converting value type
-     * @param message
+     * @param message - error message
      * @param value - value where converting errored
      */
     public ValueConversionException(String message, Object value) {

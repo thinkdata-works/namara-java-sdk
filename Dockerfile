@@ -12,6 +12,7 @@ RUN apt-get update -yqq && \
 COPY . $APPDIR
 
 RUN mvn package -e && \
+    mvn javadoc:jar && \
     ls -l target/ > target/target.txt
 
 FROM openjdk:8-jre-alpine

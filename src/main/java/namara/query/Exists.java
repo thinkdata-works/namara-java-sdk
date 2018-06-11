@@ -9,7 +9,7 @@ public class Exists extends Expression {
     /**
      * Creates an EXIST node for a WHERE expression
      *
-     * @param expression
+     * @param expression the evaluating expression
      * @return the resulting expression
      */
     public Exists exists(Expression expression) {
