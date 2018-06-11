@@ -144,6 +144,12 @@ public class ResultSet implements Iterator<Record> {
      * @throws ConnectionException
      */
     private Iterator<Object> retrieveNewIterator() throws AuthorizationException, QueryException, ConnectionException {
+        // If our limit is below 0, return an empty iterator
+        // since the query API will mark it as invalid SQL
+        if(currentLimit <= 0) {
+            return new ArrayList().iterator();
+        }
+
         JSONObject responseObject = client.query(queryBuilder.buildQuery(currentLimit, currentOffset));
         JSONArray responseRecords = responseObject.getJSONArray("results");
 

@@ -8,8 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class Client {
 
@@ -17,7 +15,7 @@ public class Client {
         /**
          * Endpoint for check if a user exists
          */
-        public static final String TESTING_ENDPOINT = "v0/static/authenticated";
+        public static final String TESTING_ENDPOINT = "v0/users/verify_token";
 
         /**
          * Endpoint for querying
@@ -169,8 +167,6 @@ public class Client {
                 .addPathSegments(Endpoints.TESTING_ENDPOINT)
                 .build();
 
-        System.out.println(url.toString());
-
         return testConnection(url);
     }
 
@@ -214,7 +210,7 @@ public class Client {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(PROTOCOL)
                 .host(connection.getNamaraHost())
-                .addPathSegment(Endpoints.QUERY_ENDPOINT)
+                .addPathSegments(Endpoints.QUERY_ENDPOINT)
                 .build();
         return query(url, jsonString);
     }
