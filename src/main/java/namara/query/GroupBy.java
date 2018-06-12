@@ -21,7 +21,7 @@ public class GroupBy extends TerminalExpression {
     /**
      * Adds a column to the GROUP BY node
      *
-     * @param column - column name for grouping
+     * @param column column name for grouping
      * @return the resulting expression
      */
     public GroupBy column(String column) {
@@ -51,9 +51,10 @@ public class GroupBy extends TerminalExpression {
     }
 
     /**
-     * Appends a HAVING node to the GROUP BY clause with a given condition. See also `Having#condition(String condition)`
+     * Appends a HAVING node to the GROUP BY clause with a given condition
      *
-     * @param condition - condition for having
+     * @see Having#condition(String)
+     * @param condition condition for having
      * @return the resulting expression
      */
     public Having having(String condition) {
@@ -62,9 +63,10 @@ public class GroupBy extends TerminalExpression {
     }
 
     /**
-     * Appends a HAVING node to the GROUP BY clause with a given conditions. See also `Having#conditions(String... conditions)`
+     * Appends a HAVING node to the GROUP BY clause with a given conditions
      *
-     * @param conditions - list of conditions for having
+     * @see Having#conditions(String...)
+     * @param conditions list of conditions for having
      * @return the resulting expression
      */
     public Having having(String... conditions) {
@@ -85,7 +87,7 @@ public class GroupBy extends TerminalExpression {
     /**
      * Creates an ORDER BY node for the GROUP BY clause with a list of columns for ordering
      *
-     * @param columns - columns for ordering
+     * @param columns columns for ordering
      * @return the resulting expression
      */
     public OrderBy orderBy(String... columns) {
@@ -96,8 +98,8 @@ public class GroupBy extends TerminalExpression {
     /**
      * Creates an ORDER BY node for the GROUP BY clause specifying a list of columns and an ordering direction
      *
-     * @param order - type for ordering
-     * @param columns - list of columns for ordering
+     * @param order type for ordering
+     * @param columns list of columns for ordering
      * @return the resulting expression
      */
     public OrderBy orderBy(OrderByType order, String... columns) {
@@ -108,8 +110,8 @@ public class GroupBy extends TerminalExpression {
     /**
      * Creates an ORDER BY node for the GROUP BY clause specifying a column and ordering direction
      *
-     * @param column - column to order on
-     * @param order - ordering direction
+     * @param column column to order on
+     * @param order ordering direction
      * @return the resulting expression
      */
     public OrderBy orderBy(String column, OrderByType order) {

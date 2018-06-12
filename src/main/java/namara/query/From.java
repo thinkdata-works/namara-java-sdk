@@ -17,7 +17,7 @@ public class From extends TerminalExpression {
     /**
      * Specifies a data set identifier for the FROM clause in expression
      *
-     * @param identifier - to include as table name
+     * @param identifier to include as table name
      * @return the resulting expression
      */
     public From dataSet(Identifier identifier) {
@@ -27,9 +27,10 @@ public class From extends TerminalExpression {
 
     /**
      * Specifies multiple data sets (for Join) for FROM clause in expression.
-     * It is advised to use explicit `.join()` calls (see Join and it's implementations)
+     * It is advised to use explicit `.join()` calls
      *
-     * @param identifiers - to include as table names
+     * @see Join
+     * @param identifiers to include as table names
      * @return the resulting expression
      */
     public From dataSets(Identifier... identifiers) {
@@ -86,6 +87,7 @@ public class From extends TerminalExpression {
      * Creates an empty WHERE node for FROM clause in expression. This appends no value, so should be used
      * for subsequent EXISTS node, else use `where(String condition)` method
      *
+     * @see From#where(String)
      * @return the resulting expression
      */
     public Where where() {
@@ -96,7 +98,7 @@ public class From extends TerminalExpression {
     /**
      * Creates a WHERE node for FROM clause in expression with given condition string
      *
-     * @param condition - condition string
+     * @param condition condition string
      * @return the resulting expression
      */
     public Where where(String condition) {
@@ -116,9 +118,10 @@ public class From extends TerminalExpression {
 
     /**
      * Creates a GROUP BY node for FROM clause, specifying multiple columns.
-     * See also `GroupBy#column` and `GroupBy#columns`
      *
-     * @param columns - list of columns
+     * @see GroupBy#columns(String...)
+     * @see GroupBy#column(String)
+     * @param columns list of columns
      * @return group by expression
      */
     public GroupBy groupBy(String... columns) {
@@ -129,7 +132,7 @@ public class From extends TerminalExpression {
     /**
      * Creates a LEFT OUTER JOIN node for FROM clause.
      *
-     * @param identifier - data set identifier
+     * @param identifier data set identifier
      * @return the resulting expression
      */
     public Join leftOuterJoin(Identifier identifier) {
@@ -140,7 +143,7 @@ public class From extends TerminalExpression {
     /**
      * Creates a RIGHT OUTER JOIN node for FROM clause
      *
-     * @param identifier - data set identifier
+     * @param identifier data set identifier
      * @return the resulting expression
      */
     public Join rightOuterJoin(Identifier identifier) {
@@ -151,7 +154,7 @@ public class From extends TerminalExpression {
     /**
      * Creates an INNER JOIN node for FROM clause
      *
-     * @param identifier - data set identifier
+     * @param identifier data set identifier
      * @return the resulting expression
      */
     public Join innerJoin(Identifier identifier) {
@@ -162,7 +165,7 @@ public class From extends TerminalExpression {
     /**
      * Creates a FULL OUTER JOIN node for FROM clause
      *
-     * @param identifier - data set identifier
+     * @param identifier data set identifier
      * @return the resulting expression
      */
     public Join fullOuterJoin(Identifier identifier) {

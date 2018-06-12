@@ -41,9 +41,10 @@ public class Where extends Condition {
     }
 
     /**
-     * Creates a new ORDER BY node for this WHERE clause with given columns
+     * Creates a new ORDER BY node for this WHERE clause with given columns using the default ordering direction
      *
-     * @param columns - for ordering by
+     * @see OrderByType#ASC
+     * @param columns list of columns to order by
      * @return the resulting expression
      */
     public OrderBy orderBy(String... columns) {
@@ -53,8 +54,8 @@ public class Where extends Condition {
     /**
      * Creates a new ORDER BY node for this WHERE clause with given columns and direction
      *
-     * @param order - order type
-     * @param columns - columns to order by
+     * @param order order type
+     * @param columns columns to order by
      * @return the resulting expression
      */
     public OrderBy orderBy(OrderByType order, String... columns) {
@@ -73,8 +74,9 @@ public class Where extends Condition {
     }
 
     /**
-     * Conjunctively appends a timestamp condition to WHERE clause. See docs for `Condition`
+     * Conjunctively appends a timestamp condition to WHERE clause
      *
+     * @see Condition#between(String, Object, Object)
      * @param columnName timestamp field
      * @param start start timestamp (can be null)
      * @param end end timestamp (can be null
@@ -86,8 +88,9 @@ public class Where extends Condition {
     }
 
     /**
-     * Conjunctively appends a timestamp condition to WHERE clause. See docs for `Condition`
+     * Conjunctively appends a timestamp condition to WHERE clause
      *
+     * @see Condition#notBetween(String, Object, Object)
      * @param columnName timestamp field
      * @param start start timestamp (can be null)
      * @param end end timestamp (can be null)
@@ -110,8 +113,9 @@ public class Where extends Condition {
     }
 
     /**
-     * Disjunctively appends a timestamp condition to WHERE clause. See docs for `Condition`
+     * Disjunctively appends a timestamp condition to WHERE clause
      *
+     * @see Condition#between(String, Object, Object)
      * @param columnName timestamp field
      * @param start start timestamp (can be null)
      * @param end end timestamp (can be null)
@@ -123,8 +127,9 @@ public class Where extends Condition {
     }
 
     /**
-     * Disjunctively appends a timestamp condition to WHERE clause. See docs for `Condition`
+     * Disjunctively appends a timestamp condition to WHERE clause
      *
+     * @see Condition#notBetween(String, Object, Object)
      * @param columnName timestamp field
      * @param start start timestamp (can be null)
      * @param end end timestamp (can be null)
@@ -138,6 +143,7 @@ public class Where extends Condition {
     /**
      * Appends an EXISTS node to the where clause. Should be used with empty where like `.where().exists(...)`
      *
+     * @see Exists
      * @param expression expression to seed existance query with
      * @return the resulting expression
      */
@@ -149,6 +155,7 @@ public class Where extends Condition {
     /**
      * Condition modifier for WHERE clause, to be used with condition param like `.where("field_name &gt;").any(...)`
      *
+     * @see Any
      * @param expression the expression for input to the condition
      * @return the resulting expression
      */
@@ -159,6 +166,8 @@ public class Where extends Condition {
 
     /**
      * Condition modifier for WHERE clause, to be used with condition param like `.where("field_name &gt;").all(...)`
+     *
+     * @see All
      * @param expression the expression for input to the condition
      * @return the resulting expression
      */

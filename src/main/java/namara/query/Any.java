@@ -9,7 +9,7 @@ public class Any extends Expression {
     /**
      * Creates an "ANY" query node
      *
-     * @param expression - the evaluating expression
+     * @param expression the evaluating expression
      * @return the resulting expression
      */
     public Any any(Expression expression) {

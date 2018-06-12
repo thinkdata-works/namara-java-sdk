@@ -141,10 +141,14 @@ public class Client {
     private final String PROTOCOL = "https";
 
     /**
-     * Builds a new client for interfacing with Namara
-     * Will ping the host with the apiKey to ensure that the connection is valid
+     * Builds a new client for interfacing with Namara.
      *
-     * @param namaraHost The host name that will be connected to
+     * This must point to a Namara API instance, but can be used to
+     * connect to any other host.
+     *
+     * The API Key can be an account API key, or one generated for an organization or project
+     *
+     * @param namaraHost The host name for Namara, such as "https://api.namara.io"
      * @param apiKey The API Key for the connecting user
      */
     public Client(String namaraHost, String apiKey) {
@@ -153,12 +157,13 @@ public class Client {
 
     /**
      * Tests the namaraHost and apiKey to ensure that they can connect with the instance.
+     *
      * If connection is successful, returns true. Otherwise, errors will be raised containing
      * details.
      *
-     * @throws AuthorizationException when API Key is not found or not valid for a user at that host
-     * @throws ConnectionException when namara host can not be reached
-     * @return true if the client is authorized
+     * @throws AuthorizationException API Key is not found or not valid for a user at that host
+     * @throws ConnectionException Unable to connect to Namara at all
+     * @return True if the host exists and the API Key is authorized for the host. Otherwise, an exception is thrown
      */
     public boolean testConnection() throws AuthorizationException, ConnectionException {
         // Will throw ConnectionException if it can't be parsed
@@ -199,13 +204,13 @@ public class Client {
     /**
      * Performs a query request on Namara and returns all results from the query
      *
-     * @param queryString - query to issue to namara
+     * @param queryString query to issue to namara
      * @return The resulting collection of records
-     * @throws AuthorizationException - when unable to authorize client for namara
-     * @throws ConnectionException - when unable to connect to namara
-     * @throws QueryException - when unable to build or execute query on namara
+     * @throws AuthorizationException when unable to authorize client for namara
+     * @throws ConnectionException when unable to connect to namara
+     * @throws QueryException when unable to build or execute query on namara
      */
-    public JSONObject query(String queryString) throws AuthorizationException, ConnectionException, QueryException {
+    JSONObject query(String queryString) throws AuthorizationException, ConnectionException, QueryException {
         String jsonString = new JSONObject().put("query", queryString).toString();
 
         HttpUrl url = new HttpUrl.Builder()
@@ -241,7 +246,7 @@ public class Client {
 
 
     /**
-     * Gets the processed host string for the client
+     * Gets the processed host string for the client that will be used on connecting
      *
      * @return The host name
      */
