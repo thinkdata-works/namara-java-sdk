@@ -64,6 +64,7 @@
                 <configuration>
                     <failOnWarnings>false</failOnWarnings>
                     <show>public</show>
+                    <outputDirectory>${project.basedir}/docs</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
