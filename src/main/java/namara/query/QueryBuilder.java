@@ -21,7 +21,7 @@ public class QueryBuilder {
     /**
      * Creates a new query builder with limit
      *
-     * @param limit
+     * @param limit - query limit
      */
     public QueryBuilder(int limit) {
         this();
@@ -29,10 +29,10 @@ public class QueryBuilder {
     }
 
     /**
-     * Creates a new query builder with limit and offset
+     * Creates a new query builder with limgit stsit and offset
      *
-     * @param limit
-     * @param offset
+     * @param limit - query limit
+     * @param offset - query offset
      */
     public QueryBuilder(int limit, int offset) {
         this(limit);

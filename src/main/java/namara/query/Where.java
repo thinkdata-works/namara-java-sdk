@@ -43,7 +43,7 @@ public class Where extends Condition {
     /**
      * Creates a new ORDER BY node for this WHERE clause with given columns
      *
-     * @param columns
+     * @param columns - for ordering by
      * @return the resulting expression
      */
     public OrderBy orderBy(String... columns) {
@@ -53,8 +53,8 @@ public class Where extends Condition {
     /**
      * Creates a new ORDER BY node for this WHERE clause with given columns and direction
      *
-     * @param order
-     * @param columns
+     * @param order - order type
+     * @param columns - columns to order by
      * @return the resulting expression
      */
     public OrderBy orderBy(OrderByType order, String... columns) {
@@ -90,7 +90,7 @@ public class Where extends Condition {
      *
      * @param columnName timestamp field
      * @param start start timestamp (can be null)
-     * @param end
+     * @param end end timestamp (can be null)
      * @return the resulting expression
      */
     public Where andNotBetween(String columnName, Object start, Object end) {
@@ -147,7 +147,7 @@ public class Where extends Condition {
     }
 
     /**
-     * Condition modifier for WHERE clause, to be used with condition param like `.where("field_name >").any(...)`
+     * Condition modifier for WHERE clause, to be used with condition param like `.where("field_name &gt;").any(...)`
      *
      * @param expression the expression for input to the condition
      * @return the resulting expression
@@ -158,7 +158,7 @@ public class Where extends Condition {
     }
 
     /**
-     * Condition modifier for WHERE clause, to be used with condition param like `.where("field_name >").all(...)`
+     * Condition modifier for WHERE clause, to be used with condition param like `.where("field_name &gt;").all(...)`
      * @param expression the expression for input to the condition
      * @return the resulting expression
      */

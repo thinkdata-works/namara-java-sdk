@@ -92,9 +92,9 @@ public class ResultSet implements Iterator<Record> {
     /**
      * Throws the exception generated during iterating
      *
-     * @throws AuthorizationException
-     * @throws ConnectionException
-     * @throws QueryException
+     * @throws AuthorizationException - when unable to authorize user on namara
+     * @throws ConnectionException - when unable to connect to namara
+     * @throws QueryException - when unable to build or execute query on namara
      * @throws NamaraException - base class. One of the above will likely be thrown, but this can catch all of them
      */
     public void throwException() throws AuthorizationException, ConnectionException, QueryException, NamaraException {
@@ -104,7 +104,7 @@ public class ResultSet implements Iterator<Record> {
     /**
      * Gets the next record
      *
-     * @return
+     * @return the next Record in the iterator
      */
     public Record next() {
         return new Record((JSONObject) recordIterator.next());
@@ -115,7 +115,7 @@ public class ResultSet implements Iterator<Record> {
      * Will return false if there are no more records to be read OR an exception has been thrown by the client
      * Please use `hasException()` and `throwException()` for access
      *
-     * @return
+     * @return whether or not the iterator holds more values
      */
     @Override
     public boolean hasNext() {

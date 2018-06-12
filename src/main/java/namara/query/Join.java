@@ -15,7 +15,7 @@ abstract class Join extends Expression {
     /**
      * Specifies the condition for joining
      *
-     * @param condition
+     * @param condition - condition for joining on
      * @return the resulting expression
      */
     public Join on(String condition) {
@@ -45,7 +45,7 @@ abstract class Join extends Expression {
     /**
      * Creates a WHERE node with a condition for the JOIN clause
      *
-     * @param condition
+     * @param condition - condition for filtering joined table
      * @return the resulting expression
      */
     public Where where(String condition) {

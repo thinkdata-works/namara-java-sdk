@@ -14,7 +14,7 @@ public class ConnectionException extends NamaraException {
     /**
      * Exception thrown when unable to connect to Namara at host
      *
-     * @param message
+     * @param message The error message
      * @param connectionUrl The url that was attempted
      */
     public ConnectionException(String message, String connectionUrl) {
@@ -25,7 +25,7 @@ public class ConnectionException extends NamaraException {
     /**
      * Exception thrown when untable to connect to Namara at host
      *
-     * @param message
+     * @param message The error message
      * @param connectionUrl The url that was attempted
      * @param requestBody The request body sent to the url
      */

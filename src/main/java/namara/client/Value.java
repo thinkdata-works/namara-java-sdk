@@ -54,7 +54,7 @@ public class Value {
 
     /**
      * @return - the value as BigDecimal
-     * @throws ValueConversionException
+     * @throws ValueConversionException if unable to convert
      */
     public BigDecimal asBigDecimal() throws ValueConversionException {
         try {
@@ -65,7 +65,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default
      * @return - value as BigDecimal or defaultValue if unable to convert
      */
     public BigDecimal tryBigDecimal(BigDecimal defaultValue) {
@@ -78,7 +78,7 @@ public class Value {
 
     /**
      * @return - the value as BigInteger
-     * @throws ValueConversionException
+     * @throws ValueConversionException if unable to convert
      */
     public BigInteger asBigInteger() throws ValueConversionException {
         try {
@@ -89,7 +89,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default BigInteger
      * @return - value as BigInteger or defaultValue if unable to convert
      */
     public BigInteger tryBigInteger(BigInteger defaultValue) {
@@ -102,7 +102,7 @@ public class Value {
 
     /**
      * @return - the value as Boolean
-     * @throws ValueConversionException
+     * @throws ValueConversionException if unable to convert
      */
     public Boolean asBoolean() throws ValueConversionException {
         try {
@@ -113,7 +113,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default Boolean
      * @return - the value as Boolean or defaultValue if unable to convert
      */
     public Boolean tryBoolean(Boolean defaultValue) {
@@ -125,9 +125,9 @@ public class Value {
     }
 
     /**
-     * @param format
+     * @param format - format for parsing the stored value into a Date
      * @return - the value as a formatted Date
-     * @throws ValueConversionException
+     * @throws ValueConversionException if unable to convert
      */
     public Date asDate(SimpleDateFormat format) throws ValueConversionException {
         try {
@@ -138,8 +138,8 @@ public class Value {
     }
 
     /**
-     * @param format
-     * @param defaultValue
+     * @param format - format for parsing the stored value into a Date
+     * @param defaultValue - default Date
      * @return - the value as a formatted date or the defaultValue if unable to parse
      */
     public Date tryDate(SimpleDateFormat format, Date defaultValue) {
@@ -156,8 +156,9 @@ public class Value {
 
     /**
      * @return - the value as Double
+     * @throws ValueConversionException if unable to convert
      */
-    public Double asDouble() {
+    public Double asDouble() throws ValueConversionException {
         try {
             return valueHolder.getDouble(key);
         } catch (JSONException e) {
@@ -166,7 +167,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default double
      * @return - the value as Double or defaultValue if unable to convert
      */
     public Double tryDouble(Double defaultValue) {
@@ -179,9 +180,11 @@ public class Value {
 
     /**
      * @param clazz - type fo Enum to retrieve
+     * @param <E> - enum type
      * @return - enum value associated with key
+     * @throws ValueConversionException if unable to convert
      */
-    public <E extends Enum<E>> E asEnum(Class<E> clazz) {
+    public <E extends Enum<E>> E asEnum(Class<E> clazz) throws ValueConversionException {
         try {
             return valueHolder.getEnum(clazz, key);
         } catch (JSONException e) {
@@ -190,9 +193,9 @@ public class Value {
     }
 
     /**
-     * @param clazz
-     * @param defaultValue
-     * @param <E>
+     * @param clazz - class for converting
+     * @param defaultValue - default Enum to return if converting fails
+     * @param <E> - enum type
      * @return - enum value associated with key, or defaultValue if unable to convert
      */
     public <E extends Enum<E>> E tryEnum(Class<E> clazz, E defaultValue) {
@@ -205,8 +208,9 @@ public class Value {
 
     /**
      * @return - value as Integer
+     * @throws ValueConversionException if unable to convert
      */
-    public Integer asInt() {
+    public Integer asInt() throws ValueConversionException {
         try {
             return valueHolder.getInt(key);
         } catch (JSONException e) {
@@ -215,7 +219,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default Integer
      * @return - the Integer value associated with key, or defaultValue if unable to convert
      */
     public Integer tryInt(Integer defaultValue) {
@@ -228,8 +232,9 @@ public class Value {
 
     /**
      * @return - the value as JSONArray
+     * @throws ValueConversionException if unable to convert
      */
-    public JSONArray asJSONArray() {
+    public JSONArray asJSONArray() throws ValueConversionException {
         try {
             return valueHolder.getJSONArray(key);
         } catch (JSONException e) {
@@ -238,7 +243,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default JSONArray
      * @return - the value as JSONArray or defaultValue if unable to convert
      */
     public JSONArray tryJSONArray(JSONArray defaultValue) {
@@ -251,8 +256,9 @@ public class Value {
 
     /**
      * @return - the value as JSONObject
+     * @throws ValueConversionException if unable to convert
      */
-    public JSONObject asJSONObject() {
+    public JSONObject asJSONObject() throws ValueConversionException {
         try {
             return valueHolder.getJSONObject(key);
         } catch (JSONException e) {
@@ -261,7 +267,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default JSONObject
      * @return - the value converted to JSONObject or defaultValue if unable to convert
      */
     public JSONObject tryJSONObject(JSONObject defaultValue) {
@@ -274,8 +280,9 @@ public class Value {
 
     /**
      * @return - the value as Long
+     * @throws ValueConversionException if unable to convert
      */
-    public Long asLong() {
+    public Long asLong() throws ValueConversionException {
         try {
             return valueHolder.getLong(key);
         } catch (JSONException e) {
@@ -284,7 +291,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default Long
      * @return - the value as Long or defaultValue if unable to convert
      */
     public Long tryLong(Long defaultValue) {
@@ -297,8 +304,9 @@ public class Value {
 
     /**
      * @return - the value as String
+     * @throws ValueConversionException if unable to convert
      */
-    public String asString() {
+    public String asString() throws ValueConversionException {
         try {
             return valueHolder.getString(key);
         } catch (JSONException e) {
@@ -307,7 +315,7 @@ public class Value {
     }
 
     /**
-     * @param defaultValue
+     * @param defaultValue - default String
      * @return - the value as String or defaultValue if unable to convert
      */
     public String tryString(String defaultValue) {
