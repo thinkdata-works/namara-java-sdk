@@ -21,7 +21,7 @@ public class QueryBuilder {
     /**
      * Creates a new query builder with limit
      *
-     * @param limit - query limit
+     * @param limit query limit
      */
     public QueryBuilder(int limit) {
         this();
@@ -29,10 +29,10 @@ public class QueryBuilder {
     }
 
     /**
-     * Creates a new query builder with limgit stsit and offset
+     * Creates a new query builder with limit and offset
      *
-     * @param limit - query limit
-     * @param offset - query offset
+     * @param limit query limit
+     * @param offset query offset
      */
     public QueryBuilder(int limit, int offset) {
         this(limit);
@@ -50,6 +50,16 @@ public class QueryBuilder {
         return context.toString();
     }
 
+    /**
+     * Creates the string representation of the query with a given limit and offset.
+     *
+     * This is used by the ResultSet in order to paginate through query results.
+     *
+     * @see namara.client.ResultSet
+     * @param limit query limit
+     * @param offset query offset
+     * @return the query string
+     */
     public String buildQuery(int limit, int offset) {
         return toString() + " LIMIT " + limit + " OFFSET " + offset;
     }

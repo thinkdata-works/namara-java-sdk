@@ -1,6 +1,6 @@
 package namara.query;
 
-abstract class Expression {
+abstract public class Expression {
     protected final Context context;
 
     Expression(Context context) {
@@ -8,7 +8,9 @@ abstract class Expression {
     }
 
     /**
-     * Gets the queryBuilder for the constructed expression
+     * Gets the queryBuilder for the constructed expression. This will be needed for passing to the ResultSet
+     *
+     * @see namara.client.ResultSet
      * @return the resulting QueryBuilder
      */
     public QueryBuilder getBuilder() {

@@ -5,6 +5,7 @@ import namara.client.exception.ConnectionException;
 import namara.client.exception.NamaraException;
 import namara.client.exception.QueryException;
 import namara.query.QueryBuilder;
+import okhttp3.HttpUrl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -54,9 +55,12 @@ public class ResultSet implements Iterator<Record> {
     private int currentOffset;
 
     /**
-     * Initializes a new ResultSet by sending a query to the Namara client
+     * Initialize a new result set with a constructed query and a Namara client.
      *
-     * @param queryBuilder the query constructor
+     * It is recommended that the client be tested before use.
+     *
+     * @see Client#testConnection()
+     * @param queryBuilder the query builder
      * @param client the namara client
      */
     public ResultSet(QueryBuilder queryBuilder, Client client) {
@@ -90,14 +94,17 @@ public class ResultSet implements Iterator<Record> {
     }
 
     /**
-     * Throws the exception generated during iterating
+     * Throws the exception generated during while getting the next ResultSet.
+     * If none is recorded, it will just return.
      *
-     * @throws AuthorizationException - when unable to authorize user on namara
-     * @throws ConnectionException - when unable to connect to namara
-     * @throws QueryException - when unable to build or execute query on namara
-     * @throws NamaraException - base class. One of the above will likely be thrown, but this can catch all of them
+     * @throws AuthorizationException Unable to authorize Namara user
+     * @throws ConnectionException Unable to connect to Namara
+     * @throws QueryException Unable to build query or execute query on Namara
+     * @throws NamaraException Base error class. One of the above will likely be thrown, but this can catch all of them
      */
     public void throwException() throws AuthorizationException, ConnectionException, QueryException, NamaraException {
+        if(exception == null) return;
+
         throw exception;
     }
 
@@ -115,7 +122,9 @@ public class ResultSet implements Iterator<Record> {
      * Will return false if there are no more records to be read OR an exception has been thrown by the client
      * Please use `hasException()` and `throwException()` for access
      *
-     * @return whether or not the iterator holds more values
+     * @see ResultSet#hasException()
+     * @see ResultSet#throwException()
+     * @return True if the iterator holds more Records
      */
     @Override
     public boolean hasNext() {
@@ -138,7 +147,7 @@ public class ResultSet implements Iterator<Record> {
      * Executes the query with the set limit and offset and creates an iterator out of the response records
      * Adjusts limit and offest for any subsequent queries.
      *
-     * @return
+     * @return An iterator of response objects
      * @throws AuthorizationException
      * @throws QueryException
      * @throws ConnectionException

@@ -9,8 +9,8 @@ public class ColumnNotFoundException extends Exception {
     /**
      * Exception thrown when trying to find a column in a ResultSet
      *
-     * @param message - the error exception
-     * @param columnName - the column name that generated the error
+     * @param message the error exception
+     * @param columnName the column name that generated the error
      */
     public ColumnNotFoundException(String message, String columnName) {
         super(message);

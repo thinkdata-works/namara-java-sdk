@@ -6,8 +6,8 @@ public class ValueConversionException extends RuntimeException {
 
     /**
      * Error when converting value type
-     * @param message - error message
-     * @param value - value where converting errored
+     * @param message error message
+     * @param value value where converting errored
      */
     public ValueConversionException(String message, Object value) {
         super(message);
@@ -16,7 +16,7 @@ public class ValueConversionException extends RuntimeException {
     }
 
     /**
-     * @return - the assigned class for the object before converting
+     * @return the assigned class for the object before converting
      */
     public Class getAssumedClass() {
         return clazz;

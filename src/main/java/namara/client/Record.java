@@ -3,10 +3,7 @@ package namara.client;
 import namara.client.exception.ColumnNotFoundException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Record {
     /**
@@ -29,7 +26,11 @@ public class Record {
     }
 
     /**
-     * @return - an iterator of values
+     * Get an iterator for all Values in this Record.
+     *
+     * Order of Values will not be guarenteed
+     *
+     * @return - an iterator of Values
      */
     public Iterator<Value> iterator() {
         List<Value> valueList = new ArrayList();
@@ -42,6 +43,15 @@ public class Record {
     }
 
     /**
+     * Gets all keys/column names for the record
+     *
+     * @return The set of column names
+     */
+    public Set<String> columnsNames() {
+        return responseObject.keySet();
+    }
+
+    /**
      * @return - the number of columns
      */
     public int length() {
@@ -51,9 +61,9 @@ public class Record {
     /**
      * Gets the Value at a particular column name
      *
-     * @param key - the column key
-     * @return - the value if found at key
-     * @throws ColumnNotFoundException - if column does not exist or
+     * @param key the column name
+     * @return the Value if it exists at that column name
+     * @throws ColumnNotFoundException Column does not exist in Record
      */
     public Value getValue(String key) throws ColumnNotFoundException {
         if(!responseObject.has(key)) {
