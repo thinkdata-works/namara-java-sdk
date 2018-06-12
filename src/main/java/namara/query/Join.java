@@ -1,6 +1,6 @@
 package namara.query;
 
-abstract class Join extends Expression {
+abstract public class Join extends Expression {
 
     Join(Context context) {
         super(context);
