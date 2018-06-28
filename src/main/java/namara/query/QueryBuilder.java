@@ -19,12 +19,34 @@ public class QueryBuilder {
     }
 
     /**
+     * Make a new query, initialized with a raw query string
+     *
+     * @param queryString query string (should not include limit and/or offset clause)
+     */
+    public QueryBuilder(String queryString) {
+        this();
+        context.append(queryString);
+    }
+
+
+    /**
      * Creates a new query builder with limit
      *
      * @param limit query limit
      */
     public QueryBuilder(int limit) {
         this();
+        this.limit = Math.abs(limit);
+    }
+
+    /**
+     * Creates a new query builder with a raw query string and a limit
+     *
+     * @param queryString query string (should not include limit and/or offset clause)
+     * @param limit query limit
+     */
+    public QueryBuilder(String queryString, int limit) {
+        this(queryString);
         this.limit = Math.abs(limit);
     }
 
@@ -36,6 +58,18 @@ public class QueryBuilder {
      */
     public QueryBuilder(int limit, int offset) {
         this(limit);
+        this.offset = Math.abs(offset);
+    }
+
+    /**
+     * Creates a new query builder with a raw query string, limit and offset
+     *
+     * @param queryString query string (should not include limit and/or offset clause)
+     * @param limit query limit
+     * @param offset query offset
+     */
+    public QueryBuilder(String queryString, int limit, int offset) {
+        this(queryString, limit);
         this.offset = Math.abs(offset);
     }
 
