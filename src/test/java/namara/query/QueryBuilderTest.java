@@ -13,6 +13,30 @@ public class QueryBuilderTest {
     private Identifier identifier2 = new Identifier("data-set-uuid2", "en-1");
 
     /*
+     * ================ Testing Raw Query ==========================
+     */
+    @Test
+    public void testQueryBuilderWithRawQuery() {
+        String query = "SELECT * FROM data-set-uuid1/en-0 WHERE count > 5";
+        String queryString = new QueryBuilder(query).toString().trim();
+        assertEquals(query, queryString);
+    }
+
+    @Test
+    public void testQueryBuilderWithRawQueryAndLimit() {
+        String query = "SELECT * FROM data-set-uuid1/en-0 WHERE count > 5";
+        String queryString = new QueryBuilder(query, 10).toString().trim();
+        assertEquals(query, queryString);
+    }
+
+    @Test
+    public void testQueryBuilderWithRawQueryAndLimitOffset() {
+        String query = "SELECT * FROM data-set-uuid1/en-0 WHERE count > 5";
+        String queryString = new QueryBuilder(query, 10, 10).toString().trim();
+        assertEquals(query, queryString);
+    }
+
+    /*
      * ================= Testing Select ============================
      */
 

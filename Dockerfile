@@ -18,10 +18,10 @@ RUN mvn package -e && \
 FROM openjdk:8-jre-alpine
 
 ENV APPDIR /app
-ENV VERSION 1.0
+ENV VERSION 1.1
 
 WORKDIR $APPDIR
 RUN mkdir -p $APPDIR
 
-COPY --from=build "/src/target/namara-$VERSION-SNAPSHOP.jar" namara-$VERSION.jar
+COPY --from=build "/src/target/namara-$VERSION-SNAPSHOT.jar" namara-$VERSION.jar
 COPY --from=build "/src/target/target.txt" target.txt
