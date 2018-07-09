@@ -2,6 +2,7 @@ package namara.client;
 
 import namara.client.exception.AuthorizationException;
 import namara.client.exception.ConnectionException;
+import namara.client.exception.NamaraException;
 import namara.client.exception.QueryException;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,11 @@ public class Client {
          * Endpoint for querying
          */
         public static final String QUERY_ENDPOINT = "v0/query";
+
+        /**
+         * Endpoint for getting query meta
+         */
+        public static final String META_ENDPOINT = "v0/query/meta";
     }
 
     class NamaraResponse {
@@ -130,10 +136,35 @@ public class Client {
         }
     }
 
+    class Meta {
+        private Integer queryLimit;
+
+        public Meta(JSONObject metaObject) {
+            if(metaObject.has("query_limit_maximum")) {
+                queryLimit = Integer.valueOf((String) metaObject.get("query_limit_maximum"));
+            } else {
+                // If unavailable, default on 250
+                queryLimit = DEFAULT_QUERY_LIMIT;
+            }
+        }
+
+        public Integer getQueryLimit() { return queryLimit; }
+    }
+
+    /**
+     * Default query value
+     */
+    static final Integer DEFAULT_QUERY_LIMIT = 250;
+
     /**
      * Connection to namara that can be used to interface
      */
     private Connection connection;
+
+    /**
+     * Any meta information about the Namara
+     */
+    private Meta meta;
 
     /**
      * Making package private so this can be set in unit tests
@@ -166,13 +197,7 @@ public class Client {
      * @return True if the host exists and the API Key is authorized for the host. Otherwise, an exception is thrown
      */
     public boolean testConnection() throws AuthorizationException, ConnectionException {
-        // Will throw ConnectionException if it can't be parsed
-        HttpUrl url = new HttpUrl.Builder()
-                .scheme(PROTOCOL)
-                .host(connection.getNamaraHost())
-                .addPathSegments(Endpoints.TESTING_ENDPOINT)
-                .build();
-
+        HttpUrl url = buildUrl(Endpoints.TESTING_ENDPOINT);
         return testConnection(url);
     }
 
@@ -212,12 +237,7 @@ public class Client {
      */
     JSONObject query(String queryString) throws AuthorizationException, ConnectionException, QueryException {
         String jsonString = new JSONObject().put("query", queryString).toString();
-
-        HttpUrl url = new HttpUrl.Builder()
-                .scheme(PROTOCOL)
-                .host(connection.getNamaraHost())
-                .addPathSegments(Endpoints.QUERY_ENDPOINT)
-                .build();
+        HttpUrl url = buildUrl(Endpoints.QUERY_ENDPOINT);
         return query(url, jsonString);
     }
 
@@ -236,12 +256,32 @@ public class Client {
                 case 422:
                     throw new QueryException("Error executing query. Got response: " + response.responseBody);
                 default:
-                    throw new ConnectionException("Something went wrong conneting to Namara. [" +
+                    throw new ConnectionException("Something went wrong connecting to Namara. [" +
                             response.responseCode + "] " + response.responseBody, connectionUrl.toString(), jsonString);
             }
         } catch(IOException e) {
             throw new ConnectionException("Encountered error when connecting: " + e.getMessage(), connectionUrl.toString());
         }
+    }
+
+    /**
+     * Retrieves the query limit for Namara
+     * @return The maximum number of records that can be queried
+     */
+    Integer getQueryLimit() {
+        /*
+         * Build meta object from client
+         */
+        if(meta == null) {
+            // If we aren't able to resolve this endpoint, just use a default
+            try {
+                setMeta();
+            } catch(NamaraException e) {
+                return DEFAULT_QUERY_LIMIT;
+            }
+        }
+
+        return meta.getQueryLimit();
     }
 
 
@@ -252,5 +292,46 @@ public class Client {
      */
     public String getNamaraHost() {
         return connection.getNamaraHost();
+    }
+
+    /**
+     * Builds a url for the given endpoint
+     *
+     * @param endpoint Endpoint enum value for connecting
+     * @return The constructed URL object
+     */
+    HttpUrl buildUrl(String endpoint) {
+        return new HttpUrl.Builder()
+                .scheme(PROTOCOL)
+                .host(connection.getNamaraHost())
+                .addPathSegments(endpoint)
+                .build();
+    }
+
+    /**
+     * Retrieves the meta information for the query endpoint and constructs the meta object
+     *
+     * @throws ConnectionException when unable to connect to Namara
+     * @throws AuthorizationException when apiKey is not authorized
+     */
+    void setMeta() throws ConnectionException, AuthorizationException {
+        HttpUrl url = buildUrl(Endpoints.META_ENDPOINT);
+
+        try {
+            NamaraResponse response = connection.getJSON(url);
+            switch(Integer.valueOf(response.responseCode)) {
+                case 200:
+                    this.meta = new Meta(new JSONObject(response.responseBody));
+                case 401:
+                case 403:
+                    throw new AuthorizationException("Unauthorized: " + response.responseBody);
+                    // Endpoint does not return 422
+                default:
+                    throw new ConnectionException("Something went wrong connecting to Namara. [" +
+                            response.responseCode + "] " + response.responseBody, url.toString());
+            }
+        } catch (IOException e) {
+            throw new ConnectionException("Encountered error when connecting " + e.getMessage(), url.toString());
+        }
     }
 }

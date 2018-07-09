@@ -18,7 +18,7 @@ RUN mvn package -e && \
 FROM openjdk:8-jre-alpine
 
 ENV APPDIR /app
-ENV VERSION 1.1
+ENV VERSION 1.2
 
 WORKDIR $APPDIR
 RUN mkdir -p $APPDIR

@@ -35,9 +35,10 @@ public class ResultSet implements Iterator<Record> {
     private NamaraException exception;
 
     /**
-     * Number of records to fetch for each iteration. This is the maximum for Namara
+     * Number of records to fetch for each iteration.
+     * This value is retrieved from the Namara client since it may differ by deployment
      */
-    private static final int FETCH_SIZE = 250;
+    private int fetchSize;
 
     /**
      * Offset to start searching for records at
@@ -61,18 +62,34 @@ public class ResultSet implements Iterator<Record> {
      *
      * @see Client#testConnection()
      * @param queryBuilder the query builder
-     * @param client the namara client
+     * @param client the Namara client
+     * @throws AuthorizationException when apiKey is not authorized for Namara
+     * @throws ConnectionException when unable to connect to Namara
+     * @throws NamaraException Base exception class
      */
-    public ResultSet(QueryBuilder queryBuilder, Client client) {
+    public ResultSet(QueryBuilder queryBuilder, Client client) throws AuthorizationException, ConnectionException, NamaraException {
+        this(queryBuilder, client, client.getQueryLimit());
+    }
+
+    /**
+     * Package-protected constructor to avoid needing to get query limit from API
+     *
+     * @param queryBuilder the query builder
+     * @param client the Namara client
+     * @param fetchSize the maximum query limit size per request
+     * @throws NamaraException
+     */
+    ResultSet(QueryBuilder queryBuilder, Client client, Integer fetchSize) {
         this.queryBuilder = queryBuilder;
         this.client = client;
+        this.fetchSize = fetchSize;
 
         /*
          * We need to ensure that we are window-ing the results properly based on the limit given in the query (if any)
          * Seed the currentLimit to begin querying
          */
-        if (queryBuilder.getLimit() == null || queryBuilder.getLimit() >= FETCH_SIZE) {
-            this.currentLimit = FETCH_SIZE;
+        if (queryBuilder.getLimit() == null || queryBuilder.getLimit() >= fetchSize) {
+            this.currentLimit = fetchSize;
         } else {
             this.currentLimit = queryBuilder.getLimit();
         }
@@ -166,12 +183,12 @@ public class ResultSet implements Iterator<Record> {
         currentOffset += currentLimit;
 
         // Check if we need to fetch less than the full window size
-        if(queryBuilder.getLimit() != null && (queryBuilder.getLimit() - currentOffset) <= FETCH_SIZE) {
+        if(queryBuilder.getLimit() != null && (queryBuilder.getLimit() - currentOffset) <= fetchSize) {
             // If the remaining rows fit in the fetching window
             currentLimit = queryBuilder.getLimit() - currentOffset;
         } else {
             // Otherwise, use default window size
-            currentLimit = FETCH_SIZE;
+            currentLimit = fetchSize;
         }
 
         return responseRecords.iterator();
