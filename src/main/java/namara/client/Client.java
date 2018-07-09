@@ -141,7 +141,12 @@ public class Client {
 
         public Meta(JSONObject metaObject) {
             if(metaObject.has("query_limit_maximum")) {
-                queryLimit = Integer.valueOf((String) metaObject.get("query_limit_maximum"));
+                Object limit = metaObject.get("query_limit_maximum");
+                if(limit instanceof Integer) {
+                    queryLimit = (Integer) limit;
+                } else { // String
+                    queryLimit = Integer.valueOf((String) limit);
+                }
             } else {
                 // If unavailable, default on 250
                 queryLimit = DEFAULT_QUERY_LIMIT;
