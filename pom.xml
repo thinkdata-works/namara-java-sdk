@@ -59,6 +59,23 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
@@ -68,6 +85,7 @@
                     <failOnWarnings>false</failOnWarnings>
                     <show>public</show>
                     <outputDirectory>${project.basedir}/docs</outputDirectory>
+                    <notimestamp>true</notimestamp>
                 </configuration>
             </plugin>
         </plugins>
