@@ -42,7 +42,7 @@ public class ResultSetTest {
                 .from().dataSet(identifier)
                 .getBuilder();
 
-        ResultSet resultSet = new ResultSet(builder, client);
+        ResultSet resultSet = new ResultSet(builder, client, 250);
         List<Record> recordList = new ArrayList();
         while(resultSet.hasNext()) {
             recordList.add(resultSet.next());
@@ -61,7 +61,7 @@ public class ResultSetTest {
                 .from().dataSet(falseIdentifier)
                 .getBuilder();
 
-        ResultSet resultSet = new ResultSet(builder, client);
+        ResultSet resultSet = new ResultSet(builder, client, 250);
         List<Record> recordList = new ArrayList();
 
         while(resultSet.hasNext()) {
@@ -87,7 +87,7 @@ public class ResultSetTest {
                 .from().dataSet(identifier)
                 .getBuilder();
 
-        ResultSet resultSet = new ResultSet(builder, client);
+        ResultSet resultSet = new ResultSet(builder, client, 250);
 
         List<Record> recordList = new ArrayList();
 
